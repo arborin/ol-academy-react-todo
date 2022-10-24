@@ -12,6 +12,7 @@ function Todo() {
     
     const [inputTask, setInputTask] = useState('');
     const [todoTasks, setTodoTasks] = useState([]);
+    const [showOnlyDone, setShowOnlyDone] = useState('');
     
     
     const showAllert = (title, message, status) => {
@@ -45,6 +46,12 @@ function Todo() {
     }
     
     
+    const deleteTask = (task_id) => {
+        const updatedTasks = todoTasks.filter((todo, id) => { return id !== task_id})
+        setTodoTasks(updatedTasks);
+    }
+    
+    
     const deleteAllTasks = () => {
         setTodoTasks([]);
     }
@@ -72,15 +79,18 @@ function Todo() {
                     
                     { 
                         todoTasks.map((task, id) => {
-                            console.log(task);
+                            
+                            {/* const status = task.status; */}
+                            
                             return (
                                     <div key={id} className="todo-item">
                                         <div className="checker"><span className=""><input type="checkbox" /></span></div>
                                             <span>{task.title}</span>
-                                        <button className="btn float-end"><Trash className="text-danger pull-end" /></button>
+                                        <button className="btn float-end" onClick={() => deleteTask(id)}><Trash className="text-danger pull-end" /></button>
                                     </div>
                                 )
                             })
+                            
                     }
                     
                 </div>
