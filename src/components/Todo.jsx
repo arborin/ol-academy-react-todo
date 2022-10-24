@@ -24,9 +24,7 @@ function Todo() {
     }
     
     
-    
     const addTask = () =>{
-         
         if(inputTask !== ''){
             let task = {title: inputTask, status: 'active'}
             todoTasks.push(task);
@@ -52,8 +50,20 @@ function Todo() {
     }
     
     
+    const donetask = (task_id) => {
+        todoTasks[task_id].status = (todoTasks[task_id].status === 'done') ? 'active' : 'done';    
+        console.log(todoTasks);    
+        setTodoTasks(todoTasks);
+    }
+    
+    
     const deleteAllTasks = () => {
         setTodoTasks([]);
+    }
+    
+    
+    const showDoneTasks = () => {
+        setShowOnlyDone(!showOnlyDone)
     }
     
     
@@ -71,7 +81,7 @@ function Todo() {
 
                 <ul className="nav nav-pills todo-nav">
                     <li role="presentation" key="all" className="nav-item all-task active"><button className="nav-link">All</button></li>
-                    <li role="presentation" key="active" className="nav-item active-task"><button className="nav-link">Done</button></li>
+                    <li role="presentation" key="active" className="nav-item active-task"><button onClick={(showDoneTasks)} className="nav-link">Done</button></li>
                     <li role="presentation" kay="complated" className="nav-item completed-task"><button onClick={deleteAllTasks} className="nav-link">Delete All</button></li>
                 </ul>
                 
@@ -80,17 +90,20 @@ function Todo() {
                     { 
                         todoTasks.map((task, id) => {
                             
-                            {/* const status = task.status; */}
-                            
-                            return (
-                                    <div key={id} className="todo-item">
-                                        <div className="checker"><span className=""><input type="checkbox" /></span></div>
-                                            <span>{task.title}</span>
-                                        <button className="btn float-end" onClick={() => deleteTask(id)}><Trash className="text-danger pull-end" /></button>
-                                    </div>
-                                )
-                            })
-                            
+                        const status = (task.status === 'done') ? 'checked' : '' ;
+                        
+                     
+                        
+                        
+                        return(
+                                
+                                <div key={id} className="todo-item">
+                                    <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(id)} defaultChecked={status}/></span></div>
+                                        <span>{task.title}</span>
+                                    <button className="btn float-end" onClick={() => deleteTask(id)}><Trash className="text-danger pull-end" /></button>
+                                </div>
+                            )
+                        })
                     }
                     
                 </div>
