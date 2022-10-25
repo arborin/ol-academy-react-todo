@@ -12,7 +12,7 @@ function Todo() {
     
     const [inputTask, setInputTask] = useState('');
     const [todoTasks, setTodoTasks] = useState([]);
-    const [donetasks, setdonetasks] = useState([])
+    
     const [showOnlyDone, setShowOnlyDone] = useState(false);
     
     
@@ -44,7 +44,7 @@ function Todo() {
                         
             // setTodoTasks(todoTasks);
             setInputTask('');
-            
+            console.log(todoTasks);
             
             
             showAllert("Good Job!", "Task added!", "success");
@@ -60,12 +60,12 @@ function Todo() {
     
     
     const deleteTask = (task_id) => {
-        setdonetasks(todoTasks.filter((todo, id) => { return todo.id !== task_id}))
-        console.log(donetasks)
+        setTodoTasks(todoTasks.filter((todo, id) => { return todo.id !== task_id}))
+        console.log(todoTasks)
     }
     
     
-    const donetask = (task_id) => {
+    const doneTask = (task_id) => {
         todoTasks[task_id].status = (todoTasks[task_id].status === false) ? true : false;    
         console.log(todoTasks);    
         setTodoTasks(todoTasks);
@@ -78,10 +78,15 @@ function Todo() {
     
     
     const showDoneTasks = () => {
-        const filtereddonetasks = todoTasks.filter((task)=>{ return task.status});
-        setShowOnlyDone(true)
+        
+        setShowOnlyDone(!showOnlyDone)
+        console.log(showOnlyDone)
         
     }
+    
+ 
+    
+    
     
 
     
@@ -106,20 +111,26 @@ function Todo() {
                 </ul>
                 
                 <div className="todo-list">
-                    { 
-                        
-                        todoTasks.map((task) => {
-                                                            
-                            return(
-                                    
+                    
+                    {/* <RenderData/> */}
+                    
+                    {
+                       
+                            
+                            todoTasks.map( (task) => {
+                            
+                                return (
+                                
                                     <div key={task.id} className="todo-item">
-                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(task.id)} defaultChecked={task.status}/></span></div>
+                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => doneTask(task.id)} defaultChecked={task.status}/></span></div>
                                             <span>{task.title}</span>
                                         <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
                                     </div>
                                 )
                             })
-                        }
+                        
+                    }
+                     
                 </div>
             </div>
         </div>
@@ -128,3 +139,8 @@ function Todo() {
 
 }
 export default Todo
+
+
+
+
+
