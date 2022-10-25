@@ -12,7 +12,8 @@ function Todo() {
     
     const [inputTask, setInputTask] = useState('');
     const [todoTasks, setTodoTasks] = useState([]);
-    const [showOnlyDone, setShowOnlyDone] = useState('');
+    const [donetasks, setdonetasks] = useState([])
+    const [showOnlyDone, setShowOnlyDone] = useState(false);
     
     
     const showAllert = (title, message, status) => {
@@ -31,12 +32,20 @@ function Todo() {
             if(todoTasks.length > 0){
                 id = todoTasks[todoTasks.length-1].id + 1;
             }
-            let task = {id: id, title: inputTask, status: 'active'}
             
-            todoTasks.push(task);
+            // let task = {id: id, title: inputTask, status: 'active'}
+            
+            setTodoTasks((winastate)=>{
+                return [...winastate, {id: id, title: inputTask, status: false}]
+            })
+            
+            
+            // todoTasks.push(task);
                         
-            setTodoTasks(todoTasks);
+            // setTodoTasks(todoTasks);
             setInputTask('');
+            
+            
             
             showAllert("Good Job!", "Task added!", "success");
         }else{
@@ -51,13 +60,13 @@ function Todo() {
     
     
     const deleteTask = (task_id) => {
-        const updatedTasks = todoTasks.filter((todo, id) => { return todo.id !== task_id})
-        setTodoTasks(updatedTasks);
+        setdonetasks(todoTasks.filter((todo, id) => { return todo.id !== task_id}))
+        console.log(donetasks)
     }
     
     
     const donetask = (task_id) => {
-        todoTasks[task_id].status = (todoTasks[task_id].status === 'done') ? 'active' : 'done';    
+        todoTasks[task_id].status = (todoTasks[task_id].status === false) ? true : false;    
         console.log(todoTasks);    
         setTodoTasks(todoTasks);
     }
@@ -69,7 +78,9 @@ function Todo() {
     
     
     const showDoneTasks = () => {
-        setShowOnlyDone(!showOnlyDone)
+        const filtereddonetasks = todoTasks.filter((task)=>{ return task.status});
+        setShowOnlyDone(true)
+        
     }
     
 
@@ -96,14 +107,13 @@ function Todo() {
                 
                 <div className="todo-list">
                     { 
+                        
                         todoTasks.map((task) => {
-                            
-                            const status = (task.status === 'done') ? 'checked' : '' ;
-                                
+                                                            
                             return(
                                     
                                     <div key={task.id} className="todo-item">
-                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(task.id)} defaultChecked={status}/></span></div>
+                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(task.id)} defaultChecked={task.status}/></span></div>
                                             <span>{task.title}</span>
                                         <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
                                     </div>
