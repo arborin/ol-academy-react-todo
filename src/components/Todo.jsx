@@ -26,9 +26,15 @@ function Todo() {
     
     const addTask = () =>{
         if(inputTask !== ''){
-            let task = {title: inputTask, status: 'active'}
-            todoTasks.push(task);
+            let id = 0;
             
+            if(todoTasks.length > 0){
+                id = todoTasks[todoTasks.length-1].id + 1;
+            }
+            let task = {id: id, title: inputTask, status: 'active'}
+            
+            todoTasks.push(task);
+                        
             setTodoTasks(todoTasks);
             setInputTask('');
             
@@ -45,7 +51,7 @@ function Todo() {
     
     
     const deleteTask = (task_id) => {
-        const updatedTasks = todoTasks.filter((todo, id) => { return id !== task_id})
+        const updatedTasks = todoTasks.filter((todo, id) => { return todo.id !== task_id})
         setTodoTasks(updatedTasks);
     }
     
@@ -66,8 +72,11 @@ function Todo() {
         setShowOnlyDone(!showOnlyDone)
     }
     
+
     
+
     return (
+    
         <div className="card card-white">
             
             <div className="card-body">
@@ -86,30 +95,26 @@ function Todo() {
                 </ul>
                 
                 <div className="todo-list">
-                    
                     { 
-                        todoTasks.map((task, id) => {
+                        todoTasks.map((task) => {
                             
-                        const status = (task.status === 'done') ? 'checked' : '' ;
-                        
-                     
-                        
-                        
-                        return(
+                            const status = (task.status === 'done') ? 'checked' : '' ;
                                 
-                                <div key={id} className="todo-item">
-                                    <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(id)} defaultChecked={status}/></span></div>
-                                        <span>{task.title}</span>
-                                    <button className="btn float-end" onClick={() => deleteTask(id)}><Trash className="text-danger pull-end" /></button>
-                                </div>
-                            )
-                        })
-                    }
-                    
+                            return(
+                                    
+                                    <div key={task.id} className="todo-item">
+                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => donetask(task.id)} defaultChecked={status}/></span></div>
+                                            <span>{task.title}</span>
+                                        <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
+                                    </div>
+                                )
+                            })
+                        }
                 </div>
             </div>
         </div>
     )
+    
 
 }
 export default Todo
