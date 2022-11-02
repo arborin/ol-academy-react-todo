@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clipboard2Plus, Trash } from 'react-bootstrap-icons';
+import { Clipboard2Plus, Trash, Pencil } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -25,7 +25,29 @@ function Todo() {
     }
     
     
+    const checkTask = () => {
+        let check = false;
+        
+        console.log(inputTask);
+        
+        todoTasks.forEach(todo => {
+            if(todo.title===inputTask){
+                check = true;
+            }
+        });
+        
+        return check;
+    }
+    
+    
     const addTask = () =>{
+       
+        
+        if(checkTask() === true){
+            showAllert("Error!", "Task already exists", "error");
+            return;
+        }
+        
         if(inputTask !== ''){
             let id = 0;
             
@@ -125,6 +147,9 @@ function Todo() {
                                         <div className="checker"><span className=""><input type="checkbox" onChange={() => doneTask(task.id)} defaultChecked={task.status}/></span></div>
                                             <span>{task.title}</span>
                                         <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
+                                        <button className="btn float-end" onClick={() => editTask(task.id)}><Pencil className="text-primary pull-end" /></button>
+                                        
+                                        
                                     </div>
                                 )
                             })
