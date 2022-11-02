@@ -76,8 +76,8 @@ function Todo() {
             setTodoTasks(newTodoTasks);
             
             setInputTask('');
+            setEditTaskId(false);
             
-            console.log(newTodoTasks);
             
             
             showAllert("Good Job!", "Task added!", "success");
@@ -159,7 +159,7 @@ function Todo() {
                                 return (
                                 
                                     <div key={task.id} className="todo-item">
-                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => doneTask(task.id)} defaultChecked={task.status}/></span></div>
+                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => doneTask(task.id)} defaultChecked={ (task.status==='done') ? true: false}/></span></div>
                                             <span>{task.title}</span>
                                         <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
                                         <button className="btn float-end" onClick={() => editTask(task.id)}><Pencil className="text-primary pull-end" /></button>
