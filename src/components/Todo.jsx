@@ -51,16 +51,17 @@ function Todo() {
         
         if(inputTask !== ''){
             let id = 0;
+            let newTodoTasks = [...todoTasks];
             
-            if(todoTasks.length > 0){
-                id = todoTasks[todoTasks.length-1].id + 1;
+            if(newTodoTasks.length > 0){
+                id = newTodoTasks[newTodoTasks.length-1].id + 1;
             }
             
             
             
             
             if(editTaskId){
-                todoTasks = todoTasks.map((todo) => {
+                newTodoTasks = newTodoTasks.map((todo) => {
                     if(todo.id === editTaskId){
                         todo.title = inputTask;
                     }
@@ -69,14 +70,14 @@ function Todo() {
                 })
             }else{
                 let task = {id: id, title: inputTask, status: 'active'}
-                todoTasks.push(task);
+                newTodoTasks.push(task);
             }
                
-            setTodoTasks(todoTasks);
+            setTodoTasks(newTodoTasks);
             
             setInputTask('');
             
-            console.log(todoTasks);
+            console.log(newTodoTasks);
             
             
             showAllert("Good Job!", "Task added!", "success");
