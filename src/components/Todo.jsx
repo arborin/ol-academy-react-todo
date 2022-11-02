@@ -44,6 +44,7 @@ function Todo() {
        
         
         if(checkTask() === true){
+            setInputTask('');
             showAllert("Error!", "Task already exists", "error");
             return;
         }
@@ -113,6 +114,7 @@ function Todo() {
     
     
     const deleteAllTasks = () => {
+        showAllert("All tasks will be delete...", "Are you sure?", "warning");
         setTodoTasks([]);
     }
     
