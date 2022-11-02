@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import { Clipboard2Plus, Trash, Pencil } from 'react-bootstrap-icons';
+import { Clipboard2Plus, Trash, Pencil, Check2Square } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 const MySwal = withReactContent(Swal)
 
 
-
+let myTasks = [];
 
 function Todo() {
     
     const [inputTask, setInputTask] = useState('');
     const [todoTasks, setTodoTasks] = useState([]);
     const [editTaskId, setEditTaskId ] = useState(false);
-    
     const [showOnlyDone, setShowOnlyDone] = useState(false);
-    
+
     
     const showAllert = (title, message, status) => {
         MySwal.fire({
@@ -51,17 +50,17 @@ function Todo() {
         
         if(inputTask !== ''){
             let id = 0;
-            let newTodoTasks = [...todoTasks];
+            myTasks = [...todoTasks];
             
-            if(newTodoTasks.length > 0){
-                id = newTodoTasks[newTodoTasks.length-1].id + 1;
+            // Calculate next index
+            if(myTasks.length > 0){
+                id = myTasks[myTasks.length-1].id + 1;
             }
             
             
-            
-            
+            // If task is edeted
             if(editTaskId){
-                newTodoTasks = newTodoTasks.map((todo) => {
+                myTasks = myTasks.map((todo) => {
                     if(todo.id === editTaskId){
                         todo.title = inputTask;
                     }
@@ -70,10 +69,10 @@ function Todo() {
                 })
             }else{
                 let task = {id: id, title: inputTask, status: 'active'}
-                newTodoTasks.push(task);
+                myTasks.push(task);
             }
                
-            setTodoTasks(newTodoTasks);
+            setTodoTasks(myTasks);
             
             setInputTask('');
             setEditTaskId(false);
@@ -93,15 +92,23 @@ function Todo() {
     
     
     const deleteTask = (task_id) => {
+        showAllert("Task will delete...", "Are you sure?", "warning");
         setTodoTasks(todoTasks.filter((todo, id) => { return todo.id !== task_id}))
         console.log(todoTasks)
     }
     
     
     const doneTask = (task_id) => {
-        todoTasks[task_id].status = (todoTasks[task_id].status === false) ? true : false;    
-        console.log(todoTasks);    
-        setTodoTasks(todoTasks);
+        showAllert("Task will done...", "Are you sure?", "warning");
+        let newTasks = todoTasks.map((todo)=>{ 
+            if(todo.id === task_id){
+                todo.status = 'done'
+            } 
+            
+            return todo;
+        })   
+        console.log("DONE TASK: " + task_id );    
+        setTodoTasks(newTasks);
     }
     
     
@@ -109,10 +116,26 @@ function Todo() {
         setTodoTasks([]);
     }
     
+    const showAllTasks = () => {
+        setInputTask('');
+         setTodoTasks(myTasks);
+    }
     
     const showDoneTasks = () => {
+        setInputTask('');
         setShowOnlyDone(!showOnlyDone)
-        console.log(showOnlyDone)
+        
+        
+        
+        
+        if(showDoneTasks){
+            console.log("SHOW DONE TASKS:  " + showOnlyDone);
+            let showTasks = myTasks.filter((task) => {return task.status === 'done'})
+            setTodoTasks(showTasks);
+        }else{
+            console.log("SHOW ALL TASKS");
+            setTodoTasks(myTasks);
+        }
     }
     
     const editTask = (taskId) =>{
@@ -121,9 +144,7 @@ function Todo() {
         console.log("EDIT TASK ID: " + taskId)
     }
     
- 
-    
-    
+   
     
 
     
@@ -142,7 +163,7 @@ function Todo() {
                 </div>
 
                 <ul className="nav nav-pills todo-nav">
-                    <li role="presentation" key="all" className="nav-item all-task active"><button className="nav-link">All</button></li>
+                    <li role="presentation" key="all" className="nav-item all-task active"><button  onClick={(showAllTasks)} className="nav-link">All</button></li>
                     <li role="presentation" key="active" className="nav-item active-task"><button onClick={(showDoneTasks)} className="nav-link">Done</button></li>
                     <li role="presentation" kay="complated" className="nav-item completed-task"><button onClick={deleteAllTasks} className="nav-link">Delete All</button></li>
                 </ul>
@@ -152,21 +173,25 @@ function Todo() {
                     {/* <RenderData/> */}
                     
                     {
-                       
-                            
+                          
                             todoTasks.map( (task) => {
-                            
-                                return (
+                                let style = {};    
+                                if(task.status === 'done'){
+                                    style = {backgroundColor: '#d3ffd3'}
+                                    }
+                                   
+                                    return (
+                                    
+                                        <div key={task.id} style={style} className="todo-item">
+                                            
+                                                <span>{task.title}</span>
+                                            <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
+                                            <button className="btn float-end" onClick={() => doneTask(task.id)}><Check2Square className="text-success" /></button>
+                                            
+                                            <button className="btn float-end" onClick={() => editTask(task.id)}><Pencil className="text-primary pull-end" /></button> 
+                                        </div>
+                                    )
                                 
-                                    <div key={task.id} className="todo-item">
-                                        <div className="checker"><span className=""><input type="checkbox" onChange={() => doneTask(task.id)} defaultChecked={ (task.status==='done') ? true: false}/></span></div>
-                                            <span>{task.title}</span>
-                                        <button className="btn float-end" onClick={() => deleteTask(task.id)}><Trash className="text-danger pull-end" /></button>
-                                        <button className="btn float-end" onClick={() => editTask(task.id)}><Pencil className="text-primary pull-end" /></button>
-                                        
-                                        
-                                    </div>
-                                )
                             })
                         
                     }
