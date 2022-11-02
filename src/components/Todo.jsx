@@ -12,6 +12,7 @@ function Todo() {
     
     const [inputTask, setInputTask] = useState('');
     const [todoTasks, setTodoTasks] = useState([]);
+    const [editTaskId, setEditTaskId ] = useState(false);
     
     const [showOnlyDone, setShowOnlyDone] = useState(false);
     
@@ -55,17 +56,26 @@ function Todo() {
                 id = todoTasks[todoTasks.length-1].id + 1;
             }
             
-            // let task = {id: id, title: inputTask, status: 'active'}
-            
-            setTodoTasks((winastate)=>{
-                return [...winastate, {id: id, title: inputTask, status: false}]
-            })
             
             
-            // todoTasks.push(task);
-                        
-            // setTodoTasks(todoTasks);
+            
+            if(editTaskId){
+                todoTasks = todoTasks.map((todo) => {
+                    if(todo.id === editTaskId){
+                        todo.title = inputTask;
+                    }
+                    
+                    return todo;
+                })
+            }else{
+                let task = {id: id, title: inputTask, status: 'active'}
+                todoTasks.push(task);
+            }
+               
+            setTodoTasks(todoTasks);
+            
             setInputTask('');
+            
             console.log(todoTasks);
             
             
@@ -100,10 +110,14 @@ function Todo() {
     
     
     const showDoneTasks = () => {
-        
         setShowOnlyDone(!showOnlyDone)
         console.log(showOnlyDone)
-        
+    }
+    
+    const editTask = (taskId) =>{
+        setEditTaskId(taskId);
+        setInputTask(todoTasks[taskId].title);
+        console.log("EDIT TASK ID: " + taskId)
     }
     
  
