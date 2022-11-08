@@ -6,7 +6,8 @@ const MySwal = withReactContent(Swal)
 
 
 function Alert(props) {
-    const status = props.status;
+  const status = props.status;
+  
   return (
     <div>
        {

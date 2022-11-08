@@ -73,8 +73,6 @@ function Todo() {
     }
     
 
-    
-
     return (
     
         <div className="card card-white">
