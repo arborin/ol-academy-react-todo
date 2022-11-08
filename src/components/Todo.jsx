@@ -87,7 +87,7 @@ function Todo() {
     };
 
     const deleteTask = (task_id) => {
-        showAllert("Task will delete...", "Are you sure?", "warning");
+        // showAllert("Task will delete...", "Are you sure?", "warning");
         setAllTasks(
             allTasks.filter((todo, id) => {
                 return todo.id !== task_id;
